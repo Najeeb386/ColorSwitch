@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:colorswitch/Mygame.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
@@ -53,9 +54,32 @@ void onMount()
 {
   size= parent.size;
   position=parent.size / 2;
+  _addHitbox();
   anchor = Anchor.center;
   super.onMount();
 }
+
+
+  void _addHitbox() {
+    final center = size / 2;
+    const precision = 8;
+    final segment = sweepAngle / (precision-1);
+    final radius = size.x / 2;
+    List<Vector2> vertices = [];
+    for (int i = 0; i < precision; i++) {
+      final thisSegmentStart = StartAngle + segment *i;
+      vertices.add(center + Vector2(math.cos(thisSegmentStart), math.sin(thisSegmentStart))*radius);
+    }
+    for (int i = precision-1; i >=0; i--) {
+      final thisSegmentStart =StartAngle + segment *i;
+      vertices.add(center + Vector2(math.cos(thisSegmentStart), math.sin(thisSegmentStart))*(radius - parent.thickness));
+    }
+  add(PolygonHitbox(
+      vertices,
+      collisionType: CollisionType.passive,
+  )
+  );
+  }
 @override
 render(Canvas canvas) {
   canvas.drawArc(size.toRect().deflate(parent.thickness / 2), StartAngle, sweepAngle, false, Paint()..color = color..style=PaintingStyle.stroke..strokeWidth=parent.thickness);
