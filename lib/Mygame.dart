@@ -94,4 +94,13 @@ camera.viewfinder.position = Vector2(0, playerY);
     }
      _initializeGame();
   }
+  bool get isGamePaused=> false;
+  void pauseGame()
+  {
+    pauseEngine();
+  }
+  void resumeGame()
+  {
+    resumeEngine();
+  }
 }

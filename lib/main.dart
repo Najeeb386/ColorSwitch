@@ -9,25 +9,48 @@ void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const HomePage(),
+      theme: ThemeData.dark(
+         
+      ),
     )
   );
 }
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late MyGame _myGame;
+  @override
+  void initState() {
+    _myGame = MyGame();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
           GameWidget(
-            game: MyGame(),
+            game: _myGame,
           ),
           Align(
             alignment: Alignment.topLeft,
-            child: IconButton(onPressed: () {}, icon: Icon( Icons.pause, color: Colors.white,)),
+            child: IconButton(onPressed: () {
+               if(_myGame.isGamePaused)
+               {
+                _myGame.resumeGame();
+               }
+               else
+               {
+                _myGame.pauseGame();
+               }
+            }, icon: Icon(_myGame.isGamePaused ? Icons.play_arrow : Icons.pause)),
           )
         ],
       )
