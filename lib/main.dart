@@ -39,19 +39,38 @@ class _HomePageState extends State<HomePage> {
           GameWidget(
             game: _myGame,
           ),
+          if(_myGame.isGamePlaying)
           Align(
             alignment: Alignment.topLeft,
             child: IconButton(onPressed: () {
-               if(_myGame.isGamePaused)
-               {
-                _myGame.resumeGame();
-               }
-               else
-               {
+              setState(() {
                 _myGame.pauseGame();
-               }
-            }, icon: Icon(_myGame.isGamePaused ? Icons.play_arrow : Icons.pause)),
-          )
+              });
+            }, icon: Icon(Icons.pause)),
+          ),
+          if(_myGame.isGamePaused)
+          
+    Container(
+      color: Colors.black45,
+      child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Paused", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 48),),
+                  SizedBox(
+                    height: 140,
+                    width: 140,
+                    child: IconButton(onPressed: () {
+                      setState(() {
+                        _myGame.resumeGame();
+                      });
+                     }, icon: Icon(Icons.play_arrow, color: Colors.white,size: 140,)))
+                ],
+              ),
+            ),
+    )
+          
+       
         ],
       )
     );

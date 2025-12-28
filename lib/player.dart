@@ -5,6 +5,7 @@ import 'package:colorswitch/ground.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/rendering.dart';
 import 'package:flutter/material.dart';
 
 class Player extends PositionComponent with HasGameReference<MyGame>, CollisionCallbacks {
@@ -77,4 +78,5 @@ void onLoad()  {
   void _changeColorRandomly() {
    _color =  game.GameColors.random();
   } 
+  
   }
