@@ -1,7 +1,10 @@
 import 'package:colorswitch/Mygame.dart';
+import 'package:colorswitch/StarComponent.dart';
 import 'package:colorswitch/circle_rotator.dart';
 import 'package:colorswitch/colorSwitcher.dart';
 import 'package:colorswitch/ground.dart';
+import 'package:colorswitch/square_rotator.dart';
+import 'package:colorswitch/triangle_rotator.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -72,6 +75,25 @@ void onLoad()  {
   {
     game.gameOver();
   }
+    }
+    else if(other is SquareSide)
+    {
+      if(this._color != other.color)
+      {
+        game.gameOver();
+      }
+    }
+    else if(other is TriangleSide)
+    {
+      if(this._color != other.color)
+      {
+        game.gameOver();
+      }
+    }
+    else if(other is StarComponent)
+    {
+      other.removeFromParent();
+      game.increaseScore();
     } 
   }
   

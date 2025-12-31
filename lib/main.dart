@@ -42,11 +42,22 @@ class _HomePageState extends State<HomePage> {
           if(_myGame.isGamePlaying)
           Align(
             alignment: Alignment.topLeft,
-            child: IconButton(onPressed: () {
-              setState(() {
-                _myGame.pauseGame();
-              });
-            }, icon: Icon(Icons.pause)),
+            child: Row(
+              children: [
+
+                IconButton(onPressed: () {
+                  setState(() {
+                    _myGame.pauseGame();
+                  });
+                }, icon: Icon(Icons.pause)),
+                ValueListenableBuilder(
+                  valueListenable: _myGame.currentscore,
+                  builder: (context,int value, child) {
+                    return Text(value.toString(), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),);
+                  }
+                )
+              ],
+            ),
           ),
           if(_myGame.isGamePaused)
           
