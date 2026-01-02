@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:colorswitch/StarComponent.dart';
 import 'package:colorswitch/circle_rotator.dart';
+import 'package:colorswitch/circle_rotator_anticlockwise.dart';
 import 'package:colorswitch/colorSwitcher.dart';
 import 'package:colorswitch/ground.dart';
 import 'package:colorswitch/player.dart';
@@ -43,16 +44,8 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
   Color backgroundColor() => const Color(0xFF222222);
 @override
   void onMount() {
-  
     _initializeGame();
-    Myplayer = Player(
-      position: Vector2(0, 400),
-    );
-    world.add(Myplayer);
- 
-    // debugMode = true;
     super.onMount();
-    // Additional setup if needed
   }
   @override
   void onTapDown(TapDownEvent event) {
@@ -60,96 +53,102 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
     Myplayer.jump();
     super.onTapDown(event);
   }
-  update(double dt) {
+  @override
+  void update(double dt) {
     final cameraPositionY = camera.viewfinder.position.y;
     final playerY = Myplayer.position.y;
     if(playerY < cameraPositionY)
     {
-camera.viewfinder.position = Vector2(0, playerY);
+      camera.viewfinder.position = Vector2(0, playerY);
     }
-    // camera.viewfinder.position = Myplayer.position;
     super.update(dt);
-   
   }
   void _initializeGame() {
     currentscore.value =0;
     // Initialize game components here
-    world.add(Ground(position: Vector2(0, 400)));
-   world.add(Myplayer=Player(position: Vector2(0, 250)));
+    add(Ground(position: Vector2(0, 400)));
+   add(Myplayer=Player(position: Vector2(0, 250)));
    camera.moveTo(Vector2(0, 0));
   _generategamecomponents();
   }
   void _generategamecomponents() {
-    world.add(Colorswitcher(
+    add(Colorswitcher(
       position: Vector2(0, 200),
       radius: 15,
     ));
    
-    world.add(Circle_rotator(
-      position: Vector2(0, 0),
-      size: Vector2(150, 150),
-    ));
-    world.add(StarComponent(position: Vector2(0, 0)));
+    // // previously: world.add(Circle_rotator(
+    // //   position: Vector2(0, 0),
+    // //   size: Vector2(150, 150),
+    // // ));
+    add(StarComponent(position: Vector2(0, 0)));
     
-    world.add(Colorswitcher(
+    add(Colorswitcher(
       position: Vector2(0, -180),
       radius: 15,
     ));
     
-    world.add(Circle_rotator(
-      position: Vector2(0, -350),
-      size: Vector2(150, 150),
-    )); 
-    world.add(StarComponent(position: Vector2(0, -350)));
+    // // previously: world.add(Circle_rotator(
+    // //   position: Vector2(0, -350),
+    // //   size: Vector2(150, 150),
+    // // )); 
+    add(StarComponent(position: Vector2(0, -350)));
     
-    world.add(Colorswitcher(
+    add(Colorswitcher(
       position: Vector2(0, -550),
       radius: 15,
     ));
     
     // Add new shapes
-    world.add(SquareRotator(
-      position: Vector2(0, -700),
-      size: Vector2(130, 130),
-      rotationSpeed: 1.5,
-    ));
-    world.add(StarComponent(position: Vector2(0, -700)));
+    // // previously: world.add(SquareRotator(
+    // //   position: Vector2(0, -700),
+    // //   size: Vector2(130, 130),
+    // //   rotationSpeed: 1.5,
+    // // ));
+    add(StarComponent(position: Vector2(0, -700)));
     
-    world.add(Colorswitcher(
+    add(Colorswitcher(
       position: Vector2(0, -850),
       radius: 15,
     ));
     
-    world.add(TriangleRotator(
-      position: Vector2(0, -1150),
-      size: Vector2(400, 400),
-      rotationSpeed: 1.5,
+    // // previously: world.add(TriangleRotator(
+    // //   position: Vector2(0, -1150),
+    // //   size: Vector2(400, 400),
+    // //   rotationSpeed: 1.5,
+    // // ));
+    add(StarComponent(position: Vector2(0, -1150)));
+     add(Circle_rotator(
+      position: Vector2(0, -1700),
+      size: Vector2(190, 190),
     ));
-    world.add(StarComponent(position: Vector2(0, -1150)));
-     world.add(Circle_rotator(
-      position: Vector2(0, -1500),
-      size: Vector2(150, 150),
+     add(Circle_rotator(
+      position: Vector2(0, -1700),
+      size: Vector2(170, 170),
     ));
-     world.add(Circle_rotator(
-      position: Vector2(0, -1500),
-      size: Vector2(100, 100),
-    ));
-    world.add(StarComponent(position: Vector2(0, 0)));
+    add(StarComponent(position: Vector2(0, -1700)));
     
-    world.add(Colorswitcher(
-      position: Vector2(0, -180),
+    add(Colorswitcher(
+      position: Vector2(0, -1500),
       radius: 15,
     ));
+    // dual anti clock circle 
+    add(Circle_rotator(
+      position: Vector2(0, -2000),
+      size: Vector2(170, 170),
+    ));
+    // add(Circle_rotator_anticlockwise(
+    //   position: Vector2(0, -2000),
+    //   size: Vector2(190, 190),
+    // ));
   }
 
   void gameOver()
   {
-    for(var element in world.children)
-    {
+    for (var element in children.toList()) {
       element.removeFromParent();
-     
     }
-     _initializeGame();
+    _initializeGame();
   }
   bool get isGamePaused=> timeScale == 0.0;
   bool get isGamePlaying=> !isGamePaused;

@@ -8,20 +8,32 @@ class Ground extends PositionComponent{
    anchor: Anchor.center,
    key: ComponentKey.named(keyName)
    );
-   late Sprite fingerSprite;
+   late Sprite? fingerSprite;
    @override
    Future<void>onLoad() async {
    await super.onLoad();
-    fingerSprite = await Sprite.load('finger.png');
+    try {
+      fingerSprite = await Sprite.load('finger.png');
+    } catch (e) {
+      fingerSprite = null;
+    }
    }
    @override
   void render(Canvas canvas) {
     // Render ground
-    fingerSprite.render(
-      canvas,
-      position: Vector2(21,0), // Positioning finger above ground
-      size: Vector2(80, 80),
-    );   
+    if (fingerSprite != null) {
+      fingerSprite!.render(
+        canvas,
+        position: Vector2(21,0),
+        size: Vector2(80, 80),
+      );
+    } else {
+      // Fallback: draw a simple rectangle
+      canvas.drawRect(
+        Rect.fromLTWH(-50, -5, 100, 10),
+        Paint()..color = Colors.white,
+      );
+    }
 }
 
 }
