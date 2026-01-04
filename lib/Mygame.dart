@@ -34,46 +34,64 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
       height: 1000,
     )
   );
+  final double _centerX = 600 / 2;
+    final double _screenHeight = 1000;
+    final double _fingerHeight = 80;
+    final double _playerRadius = 12;
+  
   @override
   void onLoad() {
-    // TODO: implement onLoad
     decorator = PaintDecorator.blur(0.0);
+    // Place finger icon at bottom center (not as ground)
+    add(FingerIcon(position: Vector2(_centerX, _screenHeight - _fingerHeight / 2)));
+    // Place player just above finger icon
+    final double playerStartY = _screenHeight - _fingerHeight - _playerRadius * 2;
+    add(Myplayer = Player(position: Vector2(_centerX, playerStartY)));
+    // Start camera so player is vertically centered
+    camera.moveTo(Vector2(_centerX, playerStartY));
+    _generategamecomponents();
     super.onLoad();
   }
   @override
-  Color backgroundColor() => const Color(0xFF222222);
-@override
-  void onMount() {
-    _initializeGame();
-    super.onMount();
-  }
-  @override
   void onTapDown(TapDownEvent event) {
-    // TODO: implement onTapDown
     Myplayer.jump();
     super.onTapDown(event);
   }
+
+// Finger icon as a separate component (top-level)
+
+
+class FingerIcon extends SpriteComponent {
+  FingerIcon({required Vector2 position}) : super(
+    position: position,
+    size: Vector2(80, 80),
+    anchor: Anchor.center,
+  );
   @override
-  void update(double dt) {
-    final cameraPositionY = camera.viewfinder.position.y;
-    final playerY = Myplayer.position.y;
-    if(playerY < cameraPositionY)
+  Future<void> onLoad() async {
+    sprite = await Sprite.load('finger.png');
+    await super.onLoad();
+  }
     {
-      camera.viewfinder.position = Vector2(0, playerY);
+      camera.viewfinder.position = Vector2(_centerX, playerY);
     }
     super.update(dt);
   }
   void _initializeGame() {
     currentscore.value =0;
     // Initialize game components here
-    add(Ground(position: Vector2(0, 400)));
-   add(Myplayer=Player(position: Vector2(0, 250)));
-   camera.moveTo(Vector2(0, 0));
-  _generategamecomponents();
+    // Place ground at bottom of screen (y = 1000 - 40 for finger sprite height)
+    final double groundY = 960; // 1000 - 40
+    add(Ground(position: Vector2(_centerX, groundY)));
+    // Place player just above ground (player radius = 12)
+    add(Myplayer=Player(position: Vector2(_centerX, groundY - 24)));
+    // Start camera at bottom
+    camera.moveTo(Vector2(_centerX, groundY));
+        add(FingerIcon(position: Vector2(_centerX, _screenHeight - _fingerHeight / 2)));
   }
   void _generategamecomponents() {
     add(Colorswitcher(
-      position: Vector2(0, 200),
+      position: Vector2(_centerX, 200),
       radius: 15,
     ));
    
@@ -81,21 +99,34 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
     // //   position: Vector2(0, 0),
     // //   size: Vector2(150, 150),
     // // ));
-    add(StarComponent(position: Vector2(0, 0)));
+    add(StarComponent(position: Vector2(_centerX, 0)));
     
     add(Colorswitcher(
-      position: Vector2(0, -180),
+      position: Vector2(_centerX, -180),
       radius: 15,
     ));
     
     // // previously: world.add(Circle_rotator(
+    // Finger icon as a separate component (top-level)
+    class FingerIcon extends SpriteComponent {
+      FingerIcon({required Vector2 position}) : super(
+        position: position,
+        size: Vector2(80, 80),
+        anchor: Anchor.center,
+      );
+      @override
+      Future<void> onLoad() async {
+        sprite = await Sprite.load('finger.png');
+        await super.onLoad();
+      }
+    }
     // //   position: Vector2(0, -350),
     // //   size: Vector2(150, 150),
     // // )); 
-    add(StarComponent(position: Vector2(0, -350)));
+    add(StarComponent(position: Vector2(_centerX, -350)));
     
     add(Colorswitcher(
-      position: Vector2(0, -550),
+      position: Vector2(_centerX, -550),
       radius: 15,
     ));
     
@@ -105,10 +136,10 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
     // //   size: Vector2(130, 130),
     // //   rotationSpeed: 1.5,
     // // ));
-    add(StarComponent(position: Vector2(0, -700)));
+    add(StarComponent(position: Vector2(_centerX, -700)));
     
     add(Colorswitcher(
-      position: Vector2(0, -850),
+      position: Vector2(_centerX, -850),
       radius: 15,
     ));
     
@@ -117,28 +148,29 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
     // //   size: Vector2(400, 400),
     // //   rotationSpeed: 1.5,
     // // ));
-    add(StarComponent(position: Vector2(0, -1150)));
+    add(StarComponent(position: Vector2(_centerX, -1150)));
      add(Circle_rotator(
-      position: Vector2(0, -1700),
+      position: Vector2(_centerX, -1700),
       size: Vector2(190, 190),
     ));
      add(Circle_rotator(
-      position: Vector2(0, -1700),
+      position: Vector2(_centerX, -1700),
       size: Vector2(170, 170),
     ));
-    add(StarComponent(position: Vector2(0, -1700)));
+    add(StarComponent(position: Vector2(_centerX, -1700)));
     
     add(Colorswitcher(
-      position: Vector2(0, -1500),
+      position: Vector2(_centerX, -1500),
       radius: 15,
     ));
     // dual anti clock circle 
     add(Circle_rotator(
-      position: Vector2(0, -2000),
+      position: Vector2(_centerX, -2000),
       size: Vector2(170, 170),
     ));
     // add(Circle_rotator_anticlockwise(
     //   position: Vector2(0, -2000),
+    
     //   size: Vector2(190, 190),
     // ));
   }

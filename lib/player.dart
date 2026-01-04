@@ -39,7 +39,7 @@ class Player extends PositionComponent with HasGameReference<MyGame>, CollisionC
     if (groundComponent != null) {
       if (positionOfAnchor(.bottomCenter).y > groundComponent.position.y) {
         _velocity.setValues(0, 0);
-        position = Vector2(0, groundComponent.position.y - height / 2 );
+        position = Vector2(position.x, groundComponent.position.y - height / 2 );
       }
     }
   }

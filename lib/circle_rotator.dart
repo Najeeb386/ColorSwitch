@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 class Circle_rotator extends PositionComponent with HasGameReference<MyGame>{
 Circle_rotator({this.rotationSpeed = 2,required super.position, required super.size,  this.thickness = 8.0,}) 
-: assert(size!.x == size!.y), 
+  : assert(size.x == size.y),
 super(
  
   anchor: Anchor.center,
